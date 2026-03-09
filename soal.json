@@ -1,0 +1,32 @@
+[
+  {
+    "t": "2 + 2 = ?",
+    "a": ["3", "4", "5"],
+    "k": 1,
+    "bobot": 1
+  },
+  {
+    "t": "5 x 2 = ?",
+    "a": ["10", "8", "12"],
+    "k": 0,
+    "bobot": 1
+  },
+  {
+    "t": "10 - 5 = ?",
+    "a": ["5", "4", "6"],
+    "k": 0,
+    "bobot": 1
+  },
+  {
+    "t": "Ibukota Indonesia?",
+    "a": ["Bandung", "Jakarta", "Surabaya"],
+    "k": 1,
+    "bobot": 1
+  },
+  {
+    "t": "Planet terbesar di tata surya?",
+    "a": ["Bumi", "Mars", "Jupiter"],
+    "k": 2,
+    "bobot": 1
+  }
+]
