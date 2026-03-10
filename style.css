@@ -1,5 +1,5 @@
 body{
-font-family:Arial;
+font-family:Arial, sans-serif;
 margin:0;
 background:#f1f5f9;
 }
@@ -42,19 +42,24 @@ background:#1e40af;
 input{
 width:100%;
 padding:10px;
-margin:5px 0;
+margin:6px 0;
 border-radius:6px;
 border:1px solid #ccc;
+}
+
+.small{
+font-size:14px;
+line-height:1.4;
 }
 
 #timer{
 font-size:22px;
 font-weight:bold;
 color:red;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
-/* LAYOUT TES */
+/* ================= LAYOUT TES ================= */
 
 .tesContainer{
 display:flex;
@@ -66,6 +71,7 @@ flex:3;
 background:white;
 padding:20px;
 border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .nomorArea{
@@ -73,20 +79,27 @@ flex:1;
 background:white;
 padding:20px;
 border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 #nomorSoal{
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:6px;
+margin-top:10px;
 }
 
 .nomorBtn{
-padding:8px;
-border-radius:6px;
 background:#e5e7eb;
+padding:10px;
 text-align:center;
+border-radius:6px;
 cursor:pointer;
+font-weight:bold;
+}
+
+.nomorBtn:hover{
+background:#cbd5f5;
 }
 
 .nomorBtn.aktif{
@@ -99,11 +112,42 @@ background:#22c55e;
 color:white;
 }
 
+/* ================= SOAL ================= */
+
+.soalCard{
+background:#f9fafb;
+padding:15px;
+border-radius:8px;
+}
+
+.opsiJawaban{
+margin-top:15px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.opsiItem{
+display:flex;
+align-items:center;
+gap:8px;
+background:#eef2ff;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.opsiItem:hover{
+background:#c7d2fe;
+}
+
+/* ================= NAV BUTTON ================= */
+
 .navBtn{
 margin-top:20px;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media(max-width:700px){
 
