@@ -1,31 +1,61 @@
 [
   {
-    "t": "2 + 2 = ?",
-    "a": ["3", "4", "5"],
+    "t": "Seorang siswa membeli 3 buku tulis seharga Rp4.000 per buku dan 2 pulpen seharga Rp2.500 per pulpen. Berapa total uang yang harus dibayar?",
+    "a": ["Rp15.000", "Rp17.000", "Rp18.000", "Rp19.000"],
     "k": 1,
     "bobot": 1
   },
   {
-    "t": "5 x 2 = ?",
-    "a": ["10", "8", "12"],
-    "k": 0,
+    "t": "Sebuah bak mandi dapat menampung 200 liter air. Jika saat ini berisi 120 liter air, berapa liter air lagi yang dibutuhkan agar penuh?",
+    "a": ["60 liter", "70 liter", "80 liter", "90 liter"],
+    "k": 2,
     "bobot": 1
   },
   {
-    "t": "10 - 5 = ?",
-    "a": ["5", "4", "6"],
-    "k": 0,
-    "bobot": 1
-  },
-  {
-    "t": "Ibukota Indonesia?",
-    "a": ["Bandung", "Jakarta", "Surabaya"],
+    "t": "Sebuah mobil menempuh jarak 150 km dalam waktu 3 jam. Berapakah kecepatan rata-rata mobil tersebut?",
+    "a": ["40 km/jam", "50 km/jam", "60 km/jam", "70 km/jam"],
     "k": 1,
     "bobot": 1
   },
   {
-    "t": "Planet terbesar di tata surya?",
-    "a": ["Bumi", "Mars", "Jupiter"],
+    "t": "Di sebuah kelas terdapat 20 siswa laki-laki dan 15 siswa perempuan. Berapa jumlah seluruh siswa di kelas tersebut?",
+    "a": ["30", "35", "40", "45"],
+    "k": 1,
+    "bobot": 1
+  },
+  {
+    "t": "Harga sebuah tas adalah Rp120.000. Jika mendapat diskon 25%, berapa harga yang harus dibayar?",
+    "a": ["Rp80.000", "Rp85.000", "Rp90.000", "Rp95.000"],
+    "k": 2,
+    "bobot": 1
+  },
+  {
+    "t": "Sebuah taman berbentuk persegi dengan panjang sisi 10 meter. Berapakah keliling taman tersebut?",
+    "a": ["20 m", "30 m", "40 m", "50 m"],
+    "k": 2,
+    "bobot": 1
+  },
+  {
+    "t": "Sebuah kelas melakukan perjalanan sejauh 240 km menggunakan bus. Jika kecepatan bus 60 km/jam, berapa waktu yang dibutuhkan?",
+    "a": ["2 jam", "3 jam", "4 jam", "5 jam"],
+    "k": 2,
+    "bobot": 1
+  },
+  {
+    "t": "Sebuah toko memiliki 50 botol minuman. Jika 18 botol terjual, berapa botol yang tersisa?",
+    "a": ["30", "31", "32", "33"],
+    "k": 2,
+    "bobot": 1
+  },
+  {
+    "t": "Sebuah persegi panjang memiliki panjang 12 cm dan lebar 5 cm. Berapakah luasnya?",
+    "a": ["50 cm²", "60 cm²", "65 cm²", "70 cm²"],
+    "k": 1,
+    "bobot": 1
+  },
+  {
+    "t": "Seorang siswa memiliki uang Rp50.000. Ia membeli makanan seharga Rp18.000 dan minuman Rp7.000. Berapa sisa uangnya?",
+    "a": ["Rp23.000", "Rp24.000", "Rp25.000", "Rp26.000"],
     "k": 2,
     "bobot": 1
   }
