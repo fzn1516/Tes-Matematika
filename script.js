@@ -39,12 +39,10 @@ function keLogin() {
   homePage.style.display = "none";
   loginPage.style.display = "block";
 }
-
 function loginGuruPage() {
   homePage.style.display = "none";
   loginGuru.style.display = "block";
 }
-
 function kembaliHome() {
   location.reload();
 }
@@ -62,13 +60,12 @@ async function loadSoal() {
 
 /* =================== MULAI TES =================== */
 async function mulaiTes() {
-  if (nama.value.trim() === "") {
-    alert("Isi nama dulu!");
+  if (nama.value.trim() === "" || kelas.value.trim() === "") {
+    alert("Isi nama dan kelas dulu!");
     return;
   }
 
   await loadSoal();
-
   if (soal.length === 0) {
     alert("Soal belum tersedia");
     return;
@@ -151,9 +148,7 @@ function soalSebelumnya() {
 function mulaiTimer() {
   timerInterval = setInterval(() => {
     waktu--;
-    const m = Math.floor(waktu / 60)
-      .toString()
-      .padStart(2, "0");
+    const m = Math.floor(waktu / 60).toString().padStart(2, "0");
     const d = (waktu % 60).toString().padStart(2, "0");
     timer.innerHTML = `${m}:${d}`;
     if (waktu <= 0) {
@@ -166,7 +161,6 @@ function mulaiTimer() {
 
 /* =================== SELESAI TES =================== */
 function selesaiTes(force = false) {
-  // Jika masih ada soal kosong
   const kosong = soal.filter((s, i) => jawaban[i] == null).length;
   if (!force && kosong > 0) {
     const lanjut = confirm(
@@ -177,27 +171,25 @@ function selesaiTes(force = false) {
 
   clearInterval(timerInterval);
 
-  // Hitung skor
   let skor = 0,
     totalBobot = 0;
   soal.forEach((s, i) => {
     totalBobot += s.bobot || 1;
     if (jawaban[i] === s.k) skor += s.bobot || 1;
   });
-
   const nilaiAkhir = Math.round((skor / totalBobot) * 100);
-  console.log("Nilai akhir:", nilaiAkhir);
 
-  // Simpan ke Firebase
+  // Simpan ke Firebase dengan ID unik per siswa
+  const docId = `${nama.value.trim()}_${kelas.value.trim()}`;
   db.collection("nilaiSiswa")
-    .add({
-      nama: nama.value,
-      kelas: kelas.value || "-",
+    .doc(docId) // overwrite jika sama nama+kelas
+    .set({
+      nama: nama.value.trim(),
+      kelas: kelas.value.trim(),
       nilai: nilaiAkhir,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
     .then(() => {
-      console.log("Berhasil simpan ke Firebase");
       tesPage.style.display = "none";
       hasilPage.style.display = "block";
       nilai.innerHTML = `<h2>${nilaiAkhir}</h2>`;
@@ -231,12 +223,12 @@ function loadDashboard() {
     .get()
     .then((snapshot) => {
       const data = snapshot.docs.map((d) => d.data());
-      // Statistik rata-rata
+
       if (data.length > 0) {
         const avg = data.reduce((a, b) => a + b.nilai, 0) / data.length;
         statistik.innerHTML = `Rata-rata: ${avg.toFixed(1)}`;
       }
-      // Rekap tabel
+
       let html = `<h3>Rekap Nilai Siswa</h3><table border="1" cellpadding="6"><tr><th>Peringkat</th><th>Nama</th><th>Kelas</th><th>Nilai</th></tr>`;
       data.forEach((d, i) => {
         html += `<tr><td>${i + 1}</td><td>${d.nama}</td><td>${d.kelas}</td><td>${d.nilai}</td></tr>`;
@@ -244,17 +236,11 @@ function loadDashboard() {
       html += "</table>";
       statistik.innerHTML += html;
 
-      // Grafik
       const namaArr = data.map((d) => d.nama);
       const nilaiArr = data.map((d) => d.nilai);
       new Chart(grafikNilai, {
         type: "bar",
-        data: {
-          labels: namaArr,
-          datasets: [
-            { label: "Nilai", data: nilaiArr, backgroundColor: "rgba(75,192,192,0.6)" },
-          ],
-        },
+        data: { labels: namaArr, datasets: [{ label: "Nilai", data: nilaiArr, backgroundColor: "rgba(75,192,192,0.6)" }] },
         options: { scales: { y: { beginAtZero: true, max: 100 } } },
       });
     });
@@ -262,18 +248,20 @@ function loadDashboard() {
 
 /* =================== EXPORT & RESET =================== */
 function exportExcel() {
-  db.collection("nilaiSiswa").get().then((snapshot) => {
-    let csv = "Nama,Kelas,Nilai\n";
-    snapshot.forEach((d) => {
-      const v = d.data();
-      csv += `${v.nama},${v.kelas},${v.nilai}\n`;
+  db.collection("nilaiSiswa")
+    .get()
+    .then((snapshot) => {
+      let csv = "Nama,Kelas,Nilai\n";
+      snapshot.forEach((d) => {
+        const v = d.data();
+        csv += `${v.nama},${v.kelas},${v.nilai}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "nilai.csv";
+      a.click();
     });
-    const blob = new Blob([csv], { type: "text/csv" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "nilai.csv";
-    a.click();
-  });
 }
 
 function resetNilai() {
