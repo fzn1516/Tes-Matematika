@@ -8,7 +8,7 @@ const loginGuru = document.getElementById("loginGuru");
 const dashboard = document.getElementById("dashboard");
 
 const nama = document.getElementById("nama");
-const kelas = document.getElementById("kelas");
+const npm = document.getElementById("npm");
 const passwordGuru = document.getElementById("passwordGuru");
 
 const soalBox = document.getElementById("soalBox");
@@ -70,8 +70,8 @@ console.error(e);
 
 async function mulaiTes(){
 
-if(nama.value.trim()==="" || kelas.value.trim()===""){
-alert("Isi nama dan kelas terlebih dahulu!");
+if(nama.value.trim()==="" || npm.value.trim()===""){
+alert("Isi nama dan npm terlebih dahulu!");
 return;
 }
 
@@ -318,7 +318,7 @@ snapshot.forEach(doc=>{
 
 const d = doc.data();
 
-html += "<tr><td>"+d.nama+"</td><td>"+d.kelas+"</td><td>"+d.nilai+"</td></tr>";
+html += "<tr><td>"+d.nama+"</td><td>"+d.npm+"</td><td>"+d.nilai+"</td></tr>";
 
 namaArr.push(d.nama);
 nilaiArr.push(d.nilai);
@@ -360,11 +360,11 @@ function exportExcel(){
 
 db.collection("nilaiSiswa").get().then(snapshot=>{
 
-let csv = "Nama,Kelas,Nilai\n";
+let csv = "Nama,Npm,Nilai\n";
 
 snapshot.forEach(doc=>{
 const d = doc.data();
-csv += d.nama + "," + d.kelas + "," + d.nilai + "\n";
+csv += d.nama + "," + d.npm + "," + d.nilai + "\n";
 });
 
 const blob = new Blob([csv],{type:"text/csv"});
@@ -402,4 +402,5 @@ loadDashboard();
 });
 
 }
+
 
