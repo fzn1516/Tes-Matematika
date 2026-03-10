@@ -212,6 +212,17 @@ updateNomor();
 
 }
 
+function cekKosong(){
+    let kosong = 0;
+
+    for(let i=0;i<soal.length;i++){
+        if(jawaban[i] == null){
+            kosong++;
+        }
+    }
+
+    return kosong;
+}
 
 /* ================= TIMER ================= */
 
@@ -245,39 +256,49 @@ selesaiTes(true);
 
 /* ================= SELESAI TES ================= */
 
-function selesaiTes(force=false){
+async function selesaiTes(force=false){
 
-clearInterval(timerInterval);
+    if(!force){
+        let kosong = cekKosong();
 
-let skor = 0;
+        if(kosong > 0){
+            let lanjut = confirm(
+                "Masih ada " + kosong + " soal yang belum dijawab.\nApakah tetap ingin menyelesaikan tes?"
+            );
 
-soal.forEach((s,i)=>{
+            if(!lanjut){
+                return;
+            }
+        }
+    }
 
-if(jawaban[i] === s.k){
-skor += s.bobot || 1;
-}
+    clearInterval(timerInterval);
 
-});
+    let skor = 0;
+    let totalBobot = 0;
 
-const total = soal.reduce((sum,s)=>sum+(s.bobot||1),0);
+    soal.forEach((s,i)=>{
+        totalBobot += s.bobot || 1;
 
-const nilaiAkhir = Math.round((skor/total)*100);
+        if(jawaban[i] === s.k){
+            skor += s.bobot || 1;
+        }
+    });
 
+    let nilaiAkhir = Math.round((skor/totalBobot)*100);
 
-db.collection("nilaiSiswa").add({
+    /* SIMPAN KE FIREBASE */
+    await addDoc(collection(db, "nilai"), {
+        nama: nama.value,
+        kelas: kelas.value || "-",
+        nilai: nilaiAkhir,
+        waktu: new Date()
+    });
 
-nama: nama.value.trim(),
-kelas: kelas.value.trim(),
-nilai: nilaiAkhir,
-timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    tesPage.style.display = "none";
+    hasilPage.style.display = "block";
 
-});
-
-tesPage.style.display="none";
-hasilPage.style.display="block";
-
-nilai.innerHTML = `<h2>${nilaiAkhir}</h2>`;
-
+    nilai.innerHTML = "<h2>" + nilaiAkhir + "</h2>";
 }
 
 
@@ -420,3 +441,4 @@ loadDashboard();
 });
 
 }
+
