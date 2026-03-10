@@ -1,3 +1,4 @@
+```javascript
 /* ================= VARIABEL HTML ================= */
 
 const homePage = document.getElementById("homePage");
@@ -18,11 +19,9 @@ const nilai = document.getElementById("nilai");
 const statistik = document.getElementById("statistik");
 const grafikNilai = document.getElementById("grafikNilai");
 
-
 /* ================= KONSTANTA ================= */
 
 const PASSWORD_GURU = "admin123";
-
 
 /* ================= DATA TES ================= */
 
@@ -31,7 +30,6 @@ let jawaban = [];
 let index = 0;
 let waktu = 20 * 60;
 let timerInterval;
-
 
 /* ================= NAVIGASI ================= */
 
@@ -53,7 +51,6 @@ function kembaliHome(){
 location.reload();
 }
 
-
 /* ================= LOAD SOAL ================= */
 
 async function loadSoal(){
@@ -70,7 +67,6 @@ alert("Gagal memuat soal.json");
 }
 
 }
-
 
 /* ================= MULAI TES ================= */
 
@@ -99,7 +95,6 @@ tampilkanSoal();
 mulaiTimer();
 
 }
-
 
 /* ================= NOMOR SOAL ================= */
 
@@ -130,7 +125,6 @@ updateNomor();
 
 }
 
-
 function updateNomor(){
 
 document.querySelectorAll(".nomorBtn").forEach((b,i)=>{
@@ -145,7 +139,6 @@ if(jawaban[i] !== null) b.classList.add("jawab");
 
 }
 
-
 /* ================= TAMPILKAN SOAL ================= */
 
 function tampilkanSoal(){
@@ -153,13 +146,8 @@ function tampilkanSoal(){
 const s = soal[index];
 
 let html = `
-<div class="soalCard">
-
 <h3>Soal ${index+1}</h3>
-
 <p>${s.t}</p>
-
-<div class="opsiJawaban">
 `;
 
 s.a.forEach((p,i)=>{
@@ -167,24 +155,18 @@ s.a.forEach((p,i)=>{
 const checked = jawaban[index] === i ? "checked" : "";
 
 html += `
-<label class="opsiItem">
-
+<label>
 <input type="radio" name="jawaban" ${checked}
 onclick="jawaban[${index}] = ${i}; updateNomor();">
-
-<span>${p}</span>
-
-</label>
+${p}
+</label><br>
 `;
 
 });
 
-html += "</div></div>";
-
 soalBox.innerHTML = html;
 
 }
-
 
 /* ================= NAVIGASI SOAL ================= */
 
@@ -212,16 +194,20 @@ updateNomor();
 
 }
 
+/* ================= CEK SOAL KOSONG ================= */
+
 function cekKosong(){
-    let kosong = 0;
 
-    for(let i=0;i<soal.length;i++){
-        if(jawaban[i] == null){
-            kosong++;
-        }
-    }
+let kosong = 0;
 
-    return kosong;
+for(let i=0;i<soal.length;i++){
+if(jawaban[i] == null){
+kosong++;
+}
+}
+
+return kosong;
+
 }
 
 /* ================= TIMER ================= */
@@ -253,54 +239,61 @@ selesaiTes(true);
 
 }
 
-
 /* ================= SELESAI TES ================= */
 
 async function selesaiTes(force=false){
 
-    if(!force){
-        let kosong = cekKosong();
+try{
 
-        if(kosong > 0){
-            let lanjut = confirm(
-                "Masih ada " + kosong + " soal yang belum dijawab.\nApakah tetap ingin menyelesaikan tes?"
-            );
+if(!force){
+let kosong = cekKosong();
 
-            if(!lanjut){
-                return;
-            }
-        }
-    }
+if(kosong > 0){
+let lanjut = confirm(
+"Masih ada " + kosong + " soal yang belum dijawab.\nApakah tetap ingin menyelesaikan tes?"
+);
 
-    clearInterval(timerInterval);
-
-    let skor = 0;
-    let totalBobot = 0;
-
-    soal.forEach((s,i)=>{
-        totalBobot += s.bobot || 1;
-
-        if(jawaban[i] === s.k){
-            skor += s.bobot || 1;
-        }
-    });
-
-    let nilaiAkhir = Math.round((skor/totalBobot)*100);
-
-    /* SIMPAN KE FIREBASE */
-    await addDoc(collection(db, "nilai"), {
-        nama: nama.value,
-        kelas: kelas.value || "-",
-        nilai: nilaiAkhir,
-        waktu: new Date()
-    });
-
-    tesPage.style.display = "none";
-    hasilPage.style.display = "block";
-
-    nilai.innerHTML = "<h2>" + nilaiAkhir + "</h2>";
+if(!lanjut) return;
+}
 }
 
+clearInterval(timerInterval);
+
+let skor = 0;
+let totalBobot = 0;
+
+soal.forEach((s,i)=>{
+totalBobot += s.bobot || 1;
+
+if(jawaban[i] === s.k){
+skor += s.bobot || 1;
+}
+});
+
+let nilaiAkhir = Math.round((skor/totalBobot)*100);
+
+/* SIMPAN KE FIREBASE */
+
+await addDoc(collection(db,"nilaiSiswa"),{
+nama:nama.value,
+kelas:kelas.value || "-",
+nilai:nilaiAkhir,
+waktu:new Date()
+});
+
+tesPage.style.display="none";
+hasilPage.style.display="block";
+
+nilai.innerHTML = "<h2>"+nilaiAkhir+"</h2>";
+
+}catch(err){
+
+console.error(err);
+alert("Gagal menyimpan nilai");
+
+}
+
+}
 
 /* ================= LOGIN GURU ================= */
 
@@ -321,17 +314,13 @@ alert("Password salah!");
 
 }
 
-
 /* ================= DASHBOARD ================= */
 
-function loadDashboard(){
+async function loadDashboard(){
 
-db.collection("nilaiSiswa").orderBy("nilai","desc").get()
-
-.then(snapshot=>{
+const snapshot = await getDocs(collection(db,"nilaiSiswa"));
 
 let html = "<h3>Rekap Nilai</h3>";
-
 html += "<table border='1'><tr><th>Nama</th><th>Kelas</th><th>Nilai</th></tr>";
 
 const namaArr = [];
@@ -341,7 +330,11 @@ snapshot.forEach(doc=>{
 
 const d = doc.data();
 
-html += `<tr><td>${d.nama}</td><td>${d.kelas}</td><td>${d.nilai}</td></tr>`;
+html += `<tr>
+<td>${d.nama}</td>
+<td>${d.kelas}</td>
+<td>${d.nilai}</td>
+</tr>`;
 
 namaArr.push(d.nama);
 nilaiArr.push(d.nilai);
@@ -352,93 +345,16 @@ html += "</table>";
 
 statistik.innerHTML = html;
 
-
 new Chart(grafikNilai,{
-
 type:"bar",
-
 data:{
 labels:namaArr,
 datasets:[{
 label:"Nilai",
-data:nilaiArr,
-backgroundColor:"rgba(54,162,235,0.6)"
+data:nilaiArr
 }]
-},
-
-options:{
-scales:{
-y:{
-beginAtZero:true,
-max:100
 }
-}
-}
-
-});
-
 });
 
 }
-
-
-/* ================= EXPORT EXCEL ================= */
-
-function exportExcel(){
-
-db.collection("nilaiSiswa").get().then(snapshot=>{
-
-let csv = "Nama,Kelas,Nilai\n";
-
-snapshot.forEach(doc=>{
-
-const d = doc.data();
-
-csv += `${d.nama},${d.kelas},${d.nilai}\n`;
-
-});
-
-const blob = new Blob([csv],{type:"text/csv"});
-
-const url = URL.createObjectURL(blob);
-
-const a = document.createElement("a");
-
-a.href = url;
-a.download = "nilai_siswa.csv";
-
-a.click();
-
-});
-
-}
-
-
-/* ================= RESET NILAI ================= */
-
-function resetNilai(){
-
-if(!confirm("Yakin ingin menghapus semua nilai?")) return;
-
-db.collection("nilaiSiswa").get().then(snapshot=>{
-
-const batch = db.batch();
-
-snapshot.docs.forEach(doc=>{
-
-batch.delete(doc.ref);
-
-});
-
-batch.commit().then(()=>{
-
-alert("Semua nilai berhasil dihapus");
-
-loadDashboard();
-
-});
-
-});
-
-}
-
+```
