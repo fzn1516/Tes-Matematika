@@ -12,8 +12,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+<!-- Konfigurasi Firebase -->
 <script>
-  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDUCyVLKUF4D2M30CCLKi1NdJdFk5JODQw",
     authDomain: "dataset-tes-matematika.firebaseapp.com",
@@ -36,11 +36,10 @@
 <p class="small">Media Tes Berbasis Web</p>
 <p class="small">
 Pembuat:<br>
-1. Muhamad Fauzan Sidiq (NPM: 2301061011)<br>
-2. Saiful Mahfud (NPM: 2301060028)<br>
-3. Wishnu Aditya Mahendra (NPM: 2301061017)<br>
-Program Studi Tadris Matematika<br>
-UIN Jurai Siwo Lampung
+1. Muhamad Fauzan Sidiq<br>
+2. Saiful Mahfud<br>
+3. Wishnu Aditya Mahendra<br>
+Program Studi Tadris Matematika, UIN Jurai Siwo Lampung
 </p>
 </header>
 
@@ -49,37 +48,27 @@ UIN Jurai Siwo Lampung
 <!-- MENU UTAMA -->
 <div id="homePage" class="card">
 <h2>Menu Utama</h2>
-<button onclick="keLogin()">Mulai Tes</button>
-<button onclick="loginGuruPage()">Dashboard Guru</button>
+<button id="btnMulai">Mulai Tes</button>
+<button id="btnDashboard">Dashboard Guru</button>
 </div>
 
 <!-- LOGIN SISWA -->
 <div id="loginPage" class="card" style="display:none">
-<button onclick="kembaliHome()">⬅ Kembali</button>
 <h2>Identitas Peserta</h2>
 <input id="nama" placeholder="Nama siswa">
 <input id="kelas" placeholder="Kelas">
-<button onclick="mulaiTes()">Mulai Mengerjakan</button>
+<button id="btnMulaiTes">Mulai Mengerjakan</button>
+<button onclick="kembaliHome()">⬅ Kembali</button>
 </div>
 
 <!-- HALAMAN TES -->
-<div id="tesPage" style="display:none">
-<div class="tesContainer">
-  <div class="soalArea">
-    <div id="timer">20:00</div>
-    <div id="soalBox"></div>
-    <div class="navBtn">
-      <button onclick="soalSebelumnya()">Sebelumnya</button>
-      <button onclick="soalBerikutnya()">Berikutnya</button>
-      <button onclick="selesaiTes()">Selesai</button>
-    </div>
-  </div>
-
-  <div class="nomorArea">
-    <h3>Nomor Soal</h3>
-    <div id="nomorSoal"></div>
-  </div>
-</div>
+<div id="tesPage" class="card" style="display:none">
+<h2>Soal</h2>
+<div id="timer">20:00</div>
+<div id="soalBox"></div>
+<button id="btnSelesai">Selesai</button>
+<button onclick="soalSebelumnya()">Sebelumnya</button>
+<button onclick="soalBerikutnya()">Berikutnya</button>
 </div>
 
 <!-- HASIL TES -->
@@ -91,28 +80,20 @@ UIN Jurai Siwo Lampung
 
 <!-- LOGIN GURU -->
 <div id="loginGuru" class="card" style="display:none">
-<button onclick="kembaliHome()">⬅ Kembali</button>
 <h2>Login Guru</h2>
 <input id="passwordGuru" type="password" placeholder="Password">
-<button onclick="cekPassword()">Masuk</button>
+<button id="btnLoginGuru">Masuk</button>
+<button onclick="kembaliHome()">⬅ Kembali</button>
 </div>
 
 <!-- DASHBOARD GURU -->
 <div id="dashboard" class="card" style="display:none">
-<button onclick="kembaliHome()">⬅ Kembali</button>
 <h2>Dashboard Guru</h2>
-
-<button onclick="exportExcel()">Export Excel</button>
-<button onclick="resetNilai()">Reset Nilai</button>
-
-<h3>Pengaturan Waktu Tes</h3>
-<input id="setTimer" placeholder="Masukkan waktu (menit)">
-<button onclick="simpanTimer()">Simpan Timer</button>
-<p>Timer saat ini: <span id="timerInfo"></span> menit</p>
-
-<h3>Statistik</h3>
 <div id="statistik"></div>
 <canvas id="grafikNilai"></canvas>
+<button onclick="exportExcel()">Export Excel</button>
+<button onclick="resetNilai()">Reset Nilai</button>
+<button onclick="kembaliHome()">⬅ Kembali</button>
 </div>
 
 </div>
