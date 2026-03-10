@@ -1,4 +1,3 @@
-```javascript
 /* ================= VARIABEL HTML ================= */
 
 const homePage = document.getElementById("homePage");
@@ -19,9 +18,11 @@ const nilai = document.getElementById("nilai");
 const statistik = document.getElementById("statistik");
 const grafikNilai = document.getElementById("grafikNilai");
 
+
 /* ================= KONSTANTA ================= */
 
 const PASSWORD_GURU = "admin123";
+
 
 /* ================= DATA TES ================= */
 
@@ -30,6 +31,7 @@ let jawaban = [];
 let index = 0;
 let waktu = 20 * 60;
 let timerInterval;
+
 
 /* ================= NAVIGASI ================= */
 
@@ -51,22 +53,19 @@ function kembaliHome(){
 location.reload();
 }
 
+
 /* ================= LOAD SOAL ================= */
 
 async function loadSoal(){
-
 try{
-
 const res = await fetch("soal.json");
 soal = await res.json();
-
 }catch(e){
-
 alert("Gagal memuat soal.json");
-
+console.error(e);
+}
 }
 
-}
 
 /* ================= MULAI TES ================= */
 
@@ -96,6 +95,7 @@ mulaiTimer();
 
 }
 
+
 /* ================= NOMOR SOAL ================= */
 
 function buatNomorSoal(){
@@ -105,16 +105,13 @@ nomorSoal.innerHTML = "";
 soal.forEach((s,i)=>{
 
 const btn = document.createElement("div");
-
 btn.innerText = i+1;
 btn.className = "nomorBtn";
 
 btn.onclick = ()=>{
-
 index = i;
 tampilkanSoal();
 updateNomor();
-
 };
 
 nomorSoal.appendChild(btn);
@@ -132,12 +129,12 @@ document.querySelectorAll(".nomorBtn").forEach((b,i)=>{
 b.classList.remove("aktif","jawab");
 
 if(i === index) b.classList.add("aktif");
-
 if(jawaban[i] !== null) b.classList.add("jawab");
 
 });
 
 }
+
 
 /* ================= TAMPILKAN SOAL ================= */
 
@@ -168,31 +165,25 @@ soalBox.innerHTML = html;
 
 }
 
+
 /* ================= NAVIGASI SOAL ================= */
 
 function soalBerikutnya(){
-
 if(index < soal.length - 1){
-
 index++;
 tampilkanSoal();
 updateNomor();
-
 }
-
 }
 
 function soalSebelumnya(){
-
 if(index > 0){
-
 index--;
 tampilkanSoal();
 updateNomor();
-
+}
 }
 
-}
 
 /* ================= CEK SOAL KOSONG ================= */
 
@@ -201,7 +192,7 @@ function cekKosong(){
 let kosong = 0;
 
 for(let i=0;i<soal.length;i++){
-if(jawaban[i] == null){
+if(jawaban[i] === null){
 kosong++;
 }
 }
@@ -209,6 +200,7 @@ kosong++;
 return kosong;
 
 }
+
 
 /* ================= TIMER ================= */
 
@@ -225,34 +217,30 @@ detik--;
 const m = Math.floor(detik/60).toString().padStart(2,"0");
 const d = (detik%60).toString().padStart(2,"0");
 
-timer.innerHTML = `${m}:${d}`;
+timer.innerHTML = m + ":" + d;
 
 if(detik <= 0){
-
 clearInterval(timerInterval);
 alert("Waktu habis");
 selesaiTes(true);
-
 }
 
 },1000);
 
 }
 
+
 /* ================= SELESAI TES ================= */
 
 async function selesaiTes(force=false){
 
-try{
-
 if(!force){
 let kosong = cekKosong();
 
-if(kosong > 0){
+if(kosong>0){
 let lanjut = confirm(
-"Masih ada " + kosong + " soal yang belum dijawab.\nApakah tetap ingin menyelesaikan tes?"
+"Masih ada "+kosong+" soal belum dijawab.\nTetap ingin menyelesaikan tes?"
 );
-
 if(!lanjut) return;
 }
 }
@@ -260,31 +248,24 @@ if(!lanjut) return;
 clearInterval(timerInterval);
 
 let skor = 0;
-let totalBobot = 0;
 
 soal.forEach((s,i)=>{
-totalBobot += s.bobot || 1;
-
 if(jawaban[i] === s.k){
 skor += s.bobot || 1;
 }
 });
 
-let nilaiAkhir = Math.round((skor/totalBobot)*100);
+const total = soal.reduce((sum,s)=>sum+(s.bobot||1),0);
+const nilaiAkhir = Math.round((skor/total)*100);
 
-/* SIMPAN KE FIREBASE */
+try{
 
-await addDoc(collection(db,"nilaiSiswa"),{
-nama:nama.value,
-kelas:kelas.value || "-",
-nilai:nilaiAkhir,
-waktu:new Date()
+await db.collection("nilaiSiswa").add({
+nama: nama.value.trim(),
+kelas: kelas.value.trim(),
+nilai: nilaiAkhir,
+timestamp: firebase.firestore.FieldValue.serverTimestamp()
 });
-
-tesPage.style.display="none";
-hasilPage.style.display="block";
-
-nilai.innerHTML = "<h2>"+nilaiAkhir+"</h2>";
 
 }catch(err){
 
@@ -293,7 +274,13 @@ alert("Gagal menyimpan nilai");
 
 }
 
+tesPage.style.display="none";
+hasilPage.style.display="block";
+
+nilai.innerHTML = "<h2>"+nilaiAkhir+"</h2>";
+
 }
+
 
 /* ================= LOGIN GURU ================= */
 
@@ -314,11 +301,13 @@ alert("Password salah!");
 
 }
 
+
 /* ================= DASHBOARD ================= */
 
-async function loadDashboard(){
+function loadDashboard(){
 
-const snapshot = await getDocs(collection(db,"nilaiSiswa"));
+db.collection("nilaiSiswa").orderBy("nilai","desc").get()
+.then(snapshot=>{
 
 let html = "<h3>Rekap Nilai</h3>";
 html += "<table border='1'><tr><th>Nama</th><th>Kelas</th><th>Nilai</th></tr>";
@@ -330,11 +319,7 @@ snapshot.forEach(doc=>{
 
 const d = doc.data();
 
-html += `<tr>
-<td>${d.nama}</td>
-<td>${d.kelas}</td>
-<td>${d.nilai}</td>
-</tr>`;
+html += "<tr><td>"+d.nama+"</td><td>"+d.kelas+"</td><td>"+d.nilai+"</td></tr>";
 
 namaArr.push(d.nama);
 nilaiArr.push(d.nilai);
@@ -351,10 +336,70 @@ data:{
 labels:namaArr,
 datasets:[{
 label:"Nilai",
-data:nilaiArr
+data:nilaiArr,
+backgroundColor:"rgba(54,162,235,0.6)"
 }]
+},
+options:{
+scales:{
+y:{
+beginAtZero:true,
+max:100
+}
+}
 }
 });
 
+});
+
 }
-```
+
+
+/* ================= EXPORT EXCEL ================= */
+
+function exportExcel(){
+
+db.collection("nilaiSiswa").get().then(snapshot=>{
+
+let csv = "Nama,Kelas,Nilai\n";
+
+snapshot.forEach(doc=>{
+const d = doc.data();
+csv += d.nama + "," + d.kelas + "," + d.nilai + "\n";
+});
+
+const blob = new Blob([csv],{type:"text/csv"});
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "nilai_siswa.csv";
+a.click();
+
+});
+
+}
+
+
+/* ================= RESET NILAI ================= */
+
+function resetNilai(){
+
+if(!confirm("Yakin ingin menghapus semua nilai?")) return;
+
+db.collection("nilaiSiswa").get().then(snapshot=>{
+
+const batch = db.batch();
+
+snapshot.docs.forEach(doc=>{
+batch.delete(doc.ref);
+});
+
+batch.commit().then(()=>{
+alert("Semua nilai berhasil dihapus");
+loadDashboard();
+});
+
+});
+
+}
