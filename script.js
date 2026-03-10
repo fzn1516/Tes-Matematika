@@ -46,7 +46,6 @@ loginGuru.style.display = "block";
 };
 
 document.getElementById("btnMulaiTes").onclick = mulaiTes;
-document.getElementById("btnSelesai").onclick = selesaiTes;
 document.getElementById("btnLoginGuru").onclick = cekPassword;
 
 function kembaliHome(){
@@ -403,3 +402,4 @@ loadDashboard();
 });
 
 }
+
