@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 <meta charset="UTF-8">
 <title>Aplikasi Tes Matematika</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="style.css">
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<!-- Konfigurasi Firebase -->
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDUCyVLKUF4D2M30CCLKi1NdJdFk5JODQw",
-    authDomain: "dataset-tes-matematika.firebaseapp.com",
-    projectId: "dataset-tes-matematika",
-    storageBucket: "dataset-tes-matematika.appspot.com",
-    messagingSenderId: "141114836217",
-    appId: "1:141114836217:web:b33aaafbc681438c8ece28",
-    measurementId: "G-0SKBT6CHVX"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+const firebaseConfig = {
+  apiKey: "AIzaSyDUCyVLKUF4D2M30CCLKi1NdJdFk5JODQw",
+  authDomain: "dataset-tes-matematika.firebaseapp.com",
+  projectId: "dataset-tes-matematika",
+  storageBucket: "dataset-tes-matematika.appspot.com",
+  messagingSenderId: "141114836217",
+  appId: "1:141114836217:web:b33aaafbc681438c8ece28"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 </script>
 
 <script src="script.js" defer></script>
+
 </head>
+
 <body>
 
 <header>
 <h1>APLIKASI TES MATEMATIKA</h1>
+
 <p class="small">Media Tes Berbasis Web</p>
+
 <p class="small">
 Pembuat:<br>
 1. Muhamad Fauzan Sidiq<br>
 2. Saiful Mahfud<br>
 3. Wishnu Aditya Mahendra<br>
-Program Studi Tadris Matematika, UIN Jurai Siwo Lampung
+Program Studi Tadris Matematika<br>
+UIN Jurai Siwo Lampung
 </p>
 </header>
 
@@ -47,55 +54,105 @@ Program Studi Tadris Matematika, UIN Jurai Siwo Lampung
 
 <!-- MENU UTAMA -->
 <div id="homePage" class="card">
+
 <h2>Menu Utama</h2>
+
 <button id="btnMulai">Mulai Tes</button>
 <button id="btnDashboard">Dashboard Guru</button>
+
 </div>
+
 
 <!-- LOGIN SISWA -->
 <div id="loginPage" class="card" style="display:none">
+
 <h2>Identitas Peserta</h2>
+
 <input id="nama" placeholder="Nama siswa">
 <input id="kelas" placeholder="Kelas">
+
 <button id="btnMulaiTes">Mulai Mengerjakan</button>
+
 <button onclick="kembaliHome()">⬅ Kembali</button>
+
 </div>
 
+
 <!-- HALAMAN TES -->
-<div id="tesPage" class="card" style="display:none">
-<h2>Soal</h2>
+<div id="tesPage" style="display:none">
+
 <div id="timer">20:00</div>
+
+<div class="tesContainer">
+
+<div class="soalArea">
+
 <div id="soalBox"></div>
-<button id="btnSelesai">Selesai</button>
+
+<div class="navBtn">
 <button onclick="soalSebelumnya()">Sebelumnya</button>
 <button onclick="soalBerikutnya()">Berikutnya</button>
+<button id="btnSelesai">Selesai</button>
 </div>
+
+</div>
+
+<div class="nomorArea">
+
+<h3>Nomor Soal</h3>
+
+<div id="nomorSoal"></div>
+
+</div>
+
+</div>
+
+</div>
+
 
 <!-- HASIL TES -->
 <div id="hasilPage" class="card" style="display:none">
+
 <h2>Hasil Tes</h2>
+
 <div id="nilai"></div>
+
 <button onclick="kembaliHome()">Kembali</button>
+
 </div>
+
 
 <!-- LOGIN GURU -->
 <div id="loginGuru" class="card" style="display:none">
+
 <h2>Login Guru</h2>
+
 <input id="passwordGuru" type="password" placeholder="Password">
+
 <button id="btnLoginGuru">Masuk</button>
+
 <button onclick="kembaliHome()">⬅ Kembali</button>
+
 </div>
+
 
 <!-- DASHBOARD GURU -->
 <div id="dashboard" class="card" style="display:none">
+
 <h2>Dashboard Guru</h2>
+
 <div id="statistik"></div>
+
 <canvas id="grafikNilai"></canvas>
+
 <button onclick="exportExcel()">Export Excel</button>
 <button onclick="resetNilai()">Reset Nilai</button>
+
 <button onclick="kembaliHome()">⬅ Kembali</button>
+
 </div>
 
 </div>
+
 </body>
 </html>
